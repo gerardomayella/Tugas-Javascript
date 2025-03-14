@@ -21,6 +21,7 @@ function loginSection(event) {
   setTimeout(() => {
     document.getElementById("choices-section").classList.add("show");
   }, 10);
+  updateProgressBar(33);
 }
 
 function choicesSection(event) {
@@ -63,7 +64,7 @@ function choicesSection(event) {
   setTimeout(() => {
     document.getElementById("selection-section").classList.add("show");
   }, 10);
-
+  updateProgressBar(66);
   toggleSelection();
 }
 
@@ -95,6 +96,7 @@ function selectionSection(event) {
   setTimeout(() => {
     document.getElementById("result-section").classList.add("show");
   }, 10);
+  updateProgressBar(100);
 }
 
 // Toggle untuk mengubah radio button menjadi dropdown dan sebaliknya
@@ -132,7 +134,21 @@ function toggleSelection() {
     }
   }
 }
-
+function disableSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.classList.add("disabled");
+    section
+      .querySelectorAll("input, button, select, textarea")
+      .forEach((el) => {
+        el.disabled = true;
+      });
+  }
+}
+function updateProgressBar(percentage) {
+  const progressBar = document.getElementById("progress-bar");
+  progressBar.style.width = percentage + "%";
+}
 // Event listener for the toggle button
 document
   .getElementById("toggle-selection")
@@ -143,7 +159,8 @@ document.getElementById("user-form").addEventListener("submit", loginSection);
 document
   .getElementById("user-input-section")
   .addEventListener("submit", function () {
-    document.getElementById("user-input-section").style.display = "none";
+    disableSection("user-input-section");
+    //document.getElementById("user-input-section").style.display = "none";
   });
 
 document
@@ -152,7 +169,8 @@ document
 document
   .getElementById("choices-section")
   .addEventListener("submit", function () {
-    document.getElementById("choices-section").style.display = "none";
+    disableSection("choices-section");
+    //document.getElementById("choices-section").style.display = "none";
   });
 
 document
@@ -161,10 +179,13 @@ document
 document
   .getElementById("selection-section")
   .addEventListener("submit", function () {
-    document.getElementById("selection-section").style.display = "none";
+    disableSection("selection-section");
+    //document.getElementById("selection-section").style.display = "none";
   });
+
 // pertama kali dijalankan
 document.getElementById("user-input-section").style.display = "block";
 setTimeout(() => {
   document.getElementById("user-input-section").classList.add("show");
+  updateProgressBar(0);
 }, 10);
