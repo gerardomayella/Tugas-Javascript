@@ -66,7 +66,6 @@ function choicesSection(event) {
     document.getElementById("selection-section").classList.add("show");
   }, 10);
 
-  // Default to showing radio buttons
   toggleSelection();
 }
 
