@@ -18,8 +18,6 @@ function loginSection(event) {
   }
 
   document.getElementById("choices-section").style.display = "block";
-  // untuk membuat transisinya kelihatan dan tidak langsung muncul karena perubahan tampilan terlalu cepat
-  // perlu di delay selama 10ms atau tergantung kebutuhan
   setTimeout(() => {
     document.getElementById("choices-section").classList.add("show");
   }, 10);
@@ -78,9 +76,12 @@ function selectionSection(event) {
   );
   const selectedDropdown = document.querySelector('select[name="dropdown"]');
 
-  const selectedValue = selectedRadio
-    ? selectedRadio.value
-    : selectedDropdown.value;
+  let selectedValue;
+  if (selectedRadio) {
+    selectedValue = selectedRadio.value;
+  } else if (selectedDropdown) {
+    selectedValue = selectedDropdown.value;
+  }
 
   const choicesText = Array.from(choices)
     .map((choice) => choice.value)
@@ -96,41 +97,72 @@ function selectionSection(event) {
   }, 10);
 }
 
-// fungsi toggle Button
+// Toggle untuk mengubah radio button menjadi dropdown dan sebaliknya
 function toggleSelection() {
   const selectionContainer = document.getElementById("selection-container");
   const radios = selectionContainer.querySelectorAll('input[type="radio"]');
   const dropdown = selectionContainer.querySelector("select");
 
   if (radios[0].style.display === "none") {
-    radios.forEach((radio) => (radio.style.display = "inline-block"));
+    // Tampilkan radio, sembunyikan dropdown
+    radios.forEach((radio) => {
+      radio.style.display = "inline-block";
+      radio.disabled = false; // Aktifkan radio
+    });
     dropdown.style.display = "none";
+    dropdown.disabled = true; // Nonaktifkan dropdown
     document.getElementById("toggle-selection").textContent =
-      "Switch to Dropdown";
+      "Ganti ke Dropdown";
   } else {
-    radios.forEach((radio) => (radio.style.display = "none"));
+    // Sembunyikan radio, tampilkan dropdown
+    radios.forEach((radio) => {
+      radio.style.display = "none";
+      radio.disabled = true; // Nonaktifkan radio
+      radio.checked = false; // Reset pilihan radio
+    });
     dropdown.style.display = "inline-block";
+    dropdown.disabled = false; // Aktifkan dropdown
     document.getElementById("toggle-selection").textContent =
-      "Switch to Radio Buttons";
+      "Ganti ke Radio Button";
+
+    if (dropdown.options.length > 0) {
+      dropdown.value = dropdown.options[0].value; // Pilih opsi pertama di dropdown
+    } else {
+      dropdown.value = ""; // Kosongkan dropdown jika tidak ada opsi
+    }
   }
 }
 
-// Event listener toggle button
+// Event listener for the toggle button
 document
   .getElementById("toggle-selection")
   .addEventListener("click", toggleSelection);
 
 //bagian event listener
 document.getElementById("user-form").addEventListener("submit", loginSection);
+document
+  .getElementById("user-input-section")
+  .addEventListener("submit", function () {
+    document.getElementById("user-input-section").style.display = "none";
+  });
 
 document
   .getElementById("choices-form")
   .addEventListener("submit", choicesSection);
+document
+  .getElementById("choices-section")
+  .addEventListener("submit", function () {
+    document.getElementById("choices-section").style.display = "none";
+  });
 
 document
   .getElementById("selection-form")
   .addEventListener("submit", selectionSection);
-
+document
+  .getElementById("selection-section")
+  .addEventListener("submit", function () {
+    document.getElementById("selection-section").style.display = "none";
+  });
 // pertama kali dijalankan
 document.getElementById("user-input-section").style.display = "block";
 setTimeout(() => {
